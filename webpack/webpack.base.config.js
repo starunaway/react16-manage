@@ -1,7 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
-console.log(path.resolve(__dirname, '..', 'src/pages'));
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -21,7 +20,7 @@ module.exports = {
     rules: [
       {
         test: /\.(ts|tsx)$/,
-        use: ['babel-loader','ts-loader'],
+        use: ['ts-loader'],
         exclude: /node_modules/
       },
       {
@@ -29,11 +28,7 @@ module.exports = {
         use: ['babel-loader'],
         exclude: /node_modules/
       },
-      // {
-      //   test: /\.(js|mjs)$/,
-      //   exclude: /@babel(?:\/|\\{1,2})runtime/,
-      //   use: ['babel-loader']
-      // },
+
       {
         test: /\.(less|css)$/,
         use: ['style-loader', 'css-loader']
