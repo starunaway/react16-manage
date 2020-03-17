@@ -13,7 +13,11 @@ module.exports = {
     alias: {
       '@src': path.resolve(__dirname, '../src'),
       '@component': path.resolve(__dirname, '../src/component'),
-      '@pages': path.resolve(__dirname, '../src/pages')
+      '@pages': path.resolve(__dirname, '../src/pages'),
+      '@app': path.resolve(__dirname, '../src/app'),
+      '@action': path.resolve(__dirname, '../src/action'),
+      '@utils':path.resolve(__dirname, '../src/utils'),
+      '@themes':path.resolve(__dirname, '../src/themes')
     }
   },
   module: {
