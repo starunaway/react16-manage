@@ -17,7 +17,8 @@ module.exports = {
       '@app': path.resolve(__dirname, '../src/app'),
       '@action': path.resolve(__dirname, '../src/action'),
       '@utils':path.resolve(__dirname, '../src/utils'),
-      '@themes':path.resolve(__dirname, '../src/themes')
+      '@themes':path.resolve(__dirname, '../src/themes'),
+      '@routes':path.resolve(__dirname, '../src/routes')
     }
   },
   module: {
