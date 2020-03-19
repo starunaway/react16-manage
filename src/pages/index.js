@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Redirect} from 'react-router-dom';
 import {Layout, Menu} from 'antd';
 import AddGoods from '@pages/addGoods';
 import AddShop from '@pages/addShop';
@@ -33,23 +33,18 @@ function App() {
 
               <SubMenu key='数据管理' title={<span>数据管理</span>}>
                 <Menu.Item key='userList'>
-                  {' '}
                   <Link to='/userList'>userList</Link>
                 </Menu.Item>
                 <Menu.Item key='shopList'>
-                  {' '}
                   <Link to='/shopList'>shopList</Link>
                 </Menu.Item>
                 <Menu.Item key='foodList'>
-                  {' '}
                   <Link to='/foodList'>foodList</Link>{' '}
                 </Menu.Item>
                 <Menu.Item key='orderList'>
-                  {' '}
                   <Link to='/orderList'>orderList</Link>{' '}
                 </Menu.Item>
                 <Menu.Item key='adminList'>
-                  {' '}
                   <Link to='/adminList'>adminList</Link>{' '}
                 </Menu.Item>
               </SubMenu>
@@ -77,17 +72,17 @@ function App() {
           </Sider>
 
           <Content>
-              <Route exact path={`/`} component={Main} />
-              <Route exact path={`/main`} component={Main} />
-              <Route exact path={`/addGoods`} component={AddGoods} />
-              <Route exact path={`/addShop`} component={AddShop} />
-              <Route exact path={`/adminList`} component={AdminList} />
-              <Route exact path={`/adminSet`} component={AdminSet} />
-              <Route exact path={`/foodList`} component={FoodList} />
-              <Route exact path={`/orderList`} component={OrderList} />
-              <Route exact path={`/shopList`} component={ShopList} />
-              <Route exact path={`/userList`} component={UserList} />
-              <Route exact path={`/visitor`} component={Visitor} />
+            <Route exact path={`/`} component={Main} />
+            <Route exact path={`/main`} component={Main} />
+            <Route exact path={`/addGoods`} component={AddGoods} />
+            <Route exact path={`/addShop`} component={AddShop} />
+            <Route exact path={`/adminList`} component={AdminList} />
+            <Route exact path={`/adminSet`} component={AdminSet} />
+            <Route exact path={`/foodList`} component={FoodList} />
+            <Route exact path={`/orderList`} component={OrderList} />
+            <Route exact path={`/shopList`} component={ShopList} />
+            <Route exact path={`/userList`} component={UserList} />
+            <Route exact path={`/visitor`} component={Visitor} />
           </Content>
         </Router>
       </Layout>

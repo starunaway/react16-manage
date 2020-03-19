@@ -4,6 +4,16 @@ module.exports = {
     contentBase: './dist',
     port: 10086,
     hot: true,
-    open:true
+    open:true,
+    proxy: {
+      "/": {
+        target: "http://localhost:10086",
+        pathRewrite: { '/': '/main' },
+      },
+      "/main": {
+        target: "http://localhost:10086",
+        pathRewrite: { '^/main': '/main' },
+      }
+    },
   }
 };
