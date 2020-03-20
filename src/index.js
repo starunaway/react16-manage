@@ -1,24 +1,7 @@
 import React from 'react';
-// import createHistory from 'history/createBrowserHistory';
+import ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
+import App from '@pages';
 import '@themes';
-import Action from '@action';
-import App from '@app';
-import models from '@models';
-import {onEffect, onFetchOption} from '@utils/reduxUtils';
 
-import routes from '@routes';
-
-const app = new App({
-  onEffect,
-  onFetchOption
-  // history: createHistory()
-});
-
-app.model(models);
-app.router((a) => {
-  return routes(a);
-});
-
-app.start('#root');
-
-new Action({dispatch: app._store.dispatch, history: app._history});
+ReactDOM.render(App, document.getElementById('root'));

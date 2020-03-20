@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Switch, Redirect} from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Redirect,Link,Route} from 'react-router-dom';
 import {Layout, Menu} from 'antd';
 import AddGoods from '@pages/addGoods';
 import AddShop from '@pages/addShop';
