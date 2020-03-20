@@ -10,7 +10,7 @@ import routes from '@routes';
 
 const app = new App({
   onEffect,
-  onFetchOption,
+  onFetchOption
   // history: createHistory()
 });
 
@@ -20,7 +20,5 @@ app.router((a) => {
 });
 
 app.start('#root');
-//
 
-// import str from '@pages';
 new Action({dispatch: app._store.dispatch, history: app._history});

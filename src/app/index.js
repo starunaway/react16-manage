@@ -66,7 +66,6 @@ function App(opts ={}) {
   }
 
   function startWithContainer(container) {
-    debugger
     if (typeof container === 'string') {
       container = document.querySelector(container);
     }
