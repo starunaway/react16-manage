@@ -1,5 +1,12 @@
 import React from 'react';
-import {BrowserRouter as Router, Switch, Redirect,Link,Route} from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Redirect,
+  Link,
+  Route
+} from 'react-router-dom';
+import {connect} from 'react-redux';
 import {Layout, Menu} from 'antd';
 import AddGoods from '@pages/addGoods';
 import AddShop from '@pages/addShop';
@@ -13,7 +20,7 @@ import UserList from '@pages/userList';
 import Visitor from '@pages/visitor';
 const {Header, Content, Sider} = Layout;
 const {SubMenu} = Menu;
-function App() {
+function App1() {
   return (
     <div className='App'>
       <Layout>
@@ -90,4 +97,32 @@ function App() {
   );
 }
 
-export default App();
+function App(props) {
+  return (
+    <div>
+      <h5 style={{color: props.color}}>{props.num}</h5>
+      <button onClick={props.PayIncrease}>add</button>
+      <button onClick={props.PayDecrease}>dec</button>
+      <button onClick={props.setRed}>red</button>
+      <button onClick={props.setBlue}>blue</button>
+    </div>
+  );
+}
+
+function mapStateToProps(state) {
+  console.log(state);
+  return {
+    num: state.num,
+    color: state.color
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    PayIncrease: () => dispatch({type: 'add'}),
+    PayDecrease: () => dispatch({type: 'dec'}),
+    setRed: () => dispatch({type: 'red'}),
+    setBlue: () => dispatch({type: 'blue'})
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -19,7 +19,8 @@ module.exports = {
       '@utils':path.resolve(__dirname, '../src/utils'),
       '@themes':path.resolve(__dirname, '../src/themes'),
       '@routes':path.resolve(__dirname, '../src/routes'),
-      '@models':path.resolve(__dirname, '../src/models')
+      '@models':path.resolve(__dirname, '../src/models'),
+      '@reducers':path.resolve(__dirname, '../src/reducers')
 
     }
   },
