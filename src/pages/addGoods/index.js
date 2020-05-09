@@ -5,7 +5,7 @@ class AddGoods extends Component {
     return (
       <div>
         添加商品
-        <a href='#/'>返回首页</a>
+        <a href='/'>返回首页</a>
       </div>
     );
   }
