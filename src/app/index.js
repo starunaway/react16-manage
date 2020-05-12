@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import * as Routers from 'react-router-dom';
 import {Provider} from 'react-redux';
 import invariant from 'invariant';
 import createStore from './createStore';
@@ -9,46 +8,32 @@ import {Base64} from 'js-base64';
 import {createBrowserHistory} from 'history';
 import {isFunction, isHTMLElement, isString} from './utils';
 
-function App(opts = {}) {
-  const {onReducer} = opts;
-  const history = opts.history || createBrowserHistory();
-
-  const app = {
-    _models: [],
-    model,
-    models,
-    start,
-    router
-  };
-  app._history = patchHistory(history);
-
-  return app;
-  function model(model) {
-    app._models.push(model);
+class App {
+  constructor(props = {}) {
+    this._history = this.patchHistory(props.history || createBrowserHistory());
+    this._models = [];
+    this._router = null;
+    this._store = null;
+    this._props = props;
   }
 
-  function models(models) {
-    app._models = [...app._models, ...models];
+  useModel(model) {
+    this._models.push(model);
   }
 
-  function oldAppStart(app) {
-    let initialState = {};
-    if (window.__INITIAL_STATE__) {
-      try {
-        initialState =
-          JSON.parse(Base64.decode(window.__INITIAL_STATE__)) || {};
-      } catch (e) {
-        console.error('parse window initial state error -> ', e);
-      }
-    }
-    const store = createStore({
-      reducers: reducerBuilder(app._models, onReducer),
-      initialState
-    });
-    app._store = store;
+  useModels(models) {
+    this._models = [...this._models, ...models];
   }
 
-  function start(container) {
+  useRouter(router) {
+    invariant(
+      isFunction(router),
+      `[app.router] router should be function, but got ${typeof router}`
+    );
+    this._router = router;
+  }
+
+  start(container) {
     if (isString(container)) {
       container = document.querySelector(container);
       invariant(container, `[app.start] container ${container} not found`);
@@ -58,47 +43,40 @@ function App(opts = {}) {
       `[app.start] container should be HTMLElement`
     );
     invariant(
-      app._router,
+      this._router,
       `[app.router] router must be registered before app.start()`
     );
 
-    if (!app._store) {
-      oldAppStart(app);
+    if (!this._store) {
+      let initialState = {};
+      if (window.__INITIAL_STATE__) {
+        try {
+          initialState =
+            JSON.parse(Base64.decode(window.__INITIAL_STATE__)) || {};
+        } catch (e) {
+          console.error('parse window initial state error -> ', e);
+        }
+      }
+      this._store = createStore({
+        reducers: reducerBuilder(this._models, this._props.onReducer),
+        initialState
+      });
     }
 
-    const store = app._store;
-
-    if (container) {
-      render(container, store, app);
-    } else {
-      return getProvider(store, this);
-    }
-  }
-
-  function router(router) {
-    invariant(
-      isFunction(router),
-      `[app.router] router should be function, but got ${typeof router}`
+    ReactDOM.render(
+      <Provider store={this._store}>{this._router(this)}</Provider>,
+      container
     );
-    app._router = router;
   }
-}
 
-function getProvider(store, app) {
-  return <Provider store={store}>{app._router(app, Routers)}</Provider>;
-}
-
-function render(container, store, app) {
-  ReactDOM.render(getProvider(store, app), container);
-}
-
-function patchHistory(history) {
-  const oldListen = history.listen;
-  history.listen = (callback) => {
-    callback(history.location);
-    return oldListen.call(history, callback);
+  patchHistory = (history) => {
+    const oldListen = history.listen;
+    history.listen = (callback) => {
+      callback(history.location);
+      return oldListen.call(history, callback);
+    };
+    return history;
   };
-  return history;
 }
 
 export default App;

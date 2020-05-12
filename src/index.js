@@ -7,8 +7,8 @@ import {onEffect, onFetchOption} from '@utils/reduxUtils.js';
 
 const app = new App({onEffect, onFetchOption});
 
-app.models(models);
-app.router(routes);
+app.useModels(models);
+app.useRouter(routes);
 
 app.start('#root');
 
