@@ -3,28 +3,50 @@ import ReactDOM from 'react-dom';
 import * as Routers from 'react-router-dom';
 import {Provider} from 'react-redux';
 import invariant from 'invariant';
+import createStore from './createStore';
+import {reducerBuilder} from './reducerBuilder';
+import {Base64} from 'js-base64';
 import {createBrowserHistory} from 'history';
 import {isFunction, isHTMLElement, isString} from './utils';
-import create from './redux/core';
 
 function App(opts = {}) {
-  const {onEffect, onFetchOption, onReducer} = opts;
+  const {onReducer} = opts;
   const history = opts.history || createBrowserHistory();
-  const createOpts = {
-    setupApp(app) {
-      app._history = patchHistory(history);
-    },
-    onEffect,
-    onFetchOption,
-    onReducer,
-    history
-  };
 
-  const app = create(createOpts);
-  const oldAppStart = app.start;
-  app.router = router;
-  app.start = start;
+  const app = {
+    _models: [],
+    model,
+    models,
+    start,
+    router
+  };
+  app._history = patchHistory(history);
+
   return app;
+  function model(model) {
+    app._models.push(model);
+  }
+
+  function models(models) {
+    app._models = [...app._models, ...models];
+  }
+
+  function oldAppStart(app) {
+    let initialState = {};
+    if (window.__INITIAL_STATE__) {
+      try {
+        initialState =
+          JSON.parse(Base64.decode(window.__INITIAL_STATE__)) || {};
+      } catch (e) {
+        console.error('parse window initial state error -> ', e);
+      }
+    }
+    const store = createStore({
+      reducers: reducerBuilder(app._models, onReducer),
+      initialState
+    });
+    app._store = store;
+  }
 
   function start(container) {
     if (isString(container)) {
