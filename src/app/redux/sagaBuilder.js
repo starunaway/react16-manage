@@ -1,7 +1,5 @@
-import * as effects from 'redux-saga/effects';
-import {fork, takeEvery} from 'redux-saga/effects';
-import fetch from './fetch';
-import {parseTwoDigitYear} from 'moment';
+import {fork, effects} from 'redux-saga';
+import * as Fetch from '../utils/fetch';
 
 export function sagaBuilder(options, args) {
   const sagaArr = [];
@@ -19,18 +17,41 @@ export function sagaBuilder(options, args) {
       }
     }
   }
-
   return function*() {
     for (let saga of sagaArr) {
-      yield fork(saga);
+      yield effects.fork(saga);
     }
+  };
+}
+
+function bodyHandler(data, type, method) {
+  if (method !== 'get' && data) {
+    if (type === 'json') {
+      return JSON.stringify(data);
+    } else if (type === 'from') {
+      let pairs = [];
+      for (let key of data) {
+        pairs.push(key + '=' + data[key]);
+      }
+      return pairs.join('&');
+    }
+  }
+  if (method === 'get') {
+    return '';
+  }
+  return data;
+}
+
+function getEffect(item) {
+  return function* baseEffect({payload}, {fetch, option}) {
+    return yield fetch(item.url(payload), option);
   };
 }
 
 export function createSaga(item, {onEffect, onFetchOption, history}) {
   const action = item.action || item.key;
   return function*() {
-    let take = item.takeEvery || takeEvery;
+    let take = item.takeEvery || effects.takeEvery;
     yield take(action, function*(actions) {
       let response;
       const effect = item.effect || getEffect(item);
@@ -38,7 +59,6 @@ export function createSaga(item, {onEffect, onFetchOption, history}) {
         type: action,
         payload: actions.payload
       };
-
       try {
         let type = item.type || 'json';
         let bodyParser = item.body || bodyHandler;
@@ -51,16 +71,20 @@ export function createSaga(item, {onEffect, onFetchOption, history}) {
         if (typeof onFetchOption === 'function') {
           option = onFetchOption(option, item);
         }
-        response = yield effect(actions, {fetch, option}, {...effects}, item);
+        response = yield effect(
+          actions,
+          {fetch: Fetch.fetch, option},
+          {...effects},
+          item
+        );
       } catch (error) {
         putAction.success = false;
         putAction.loading = false;
         putAction.result = null;
-        putAction.message = error || 'error';
-        putAction.type = `${putAction.type}_FAIL`;
+        putAction.message = error || '请求异常';
+        putAction.type = `${putAction.type}_FAIl`;
         yield effects.put(putAction);
       }
-
       if (response) {
         if (typeof onEffect === 'function') {
           putAction.url = item.url(actions.payload);
@@ -80,41 +104,15 @@ export function createSaga(item, {onEffect, onFetchOption, history}) {
   };
 }
 
-function bodyHandler(data, type, method) {
-  if (method !== 'get' && data) {
-    if (type === 'json') {
-      return JSON.stringify(data);
-    } else if (type === 'form') {
-      let pairs = [];
-      for (let key of data) {
-        pairs.push(key + '=' + data[key]);
-      }
-      return pairs.join('&');
-    }
-  }
-  if (method === 'get') {
-    return '';
-  }
-  return data;
-}
-
-function getEffect(item) {
-  return function* baseEffect({payload}, {fetchData, option}) {
-    return yield fetchData(item.url(payload), option);
-  };
-}
-
 function createOptions(method, type, extHeaders, payload) {
   let options = {method};
-  options.header = extHeaders || {
+  options.headers = extHeaders || {
     Accept: 'application/json',
     'Content-Type':
       type === 'json' ? 'application/json' : 'application/x-www-form-urlencoded'
   };
-
   if (method !== 'get') {
     options.body = payload;
   }
-
   return options;
 }

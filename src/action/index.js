@@ -14,7 +14,7 @@ class Action {
     let timer = setTimeout(() => {
       clearTimeout(timer);
       timer = null;
-      __action().dispatch({type, payload});
+      __action()._dispatch({type, payload});
     });
   };
 

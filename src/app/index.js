@@ -2,75 +2,46 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as Routers from 'react-router-dom';
 import {Provider} from 'react-redux';
+import invariant from 'invariant';
 import {createBrowserHistory} from 'history';
-import createSagaMiddleware from 'redux-saga';
-import createStore from './createStore';
-import {reducerBuilder} from './reducerBuilder';
-import {sagaBuilder} from './sagaBuilder';
-import {Base64} from 'js-base64';
-import 'react-redux';
+import {isFunction, isHTMLElement, isString} from './utils';
+import create from './redux/core';
 
-const cSagaMiddleware = createSagaMiddleware.default || createSagaMiddleware;
-
-function App(opts ={}) {
-
+function App(opts = {}) {
   const {onEffect, onFetchOption, onReducer} = opts;
-  const history = createBrowserHistory();
-
-  const app = {
-    _models: [],
-    model,
-    models,
-    reducerMiddleware,
-    start: startWithContainer,
-    router
+  const history = opts.history || createBrowserHistory();
+  const createOpts = {
+    setupApp(app) {
+      app._history = patchHistory(history);
+    },
+    onEffect,
+    onFetchOption,
+    onReducer,
+    history
   };
 
+  const app = create(createOpts);
+  const oldAppStart = app.start;
+  app.router = router;
+  app.start = start;
   return app;
 
-  function model(model) {
-    app._models.push(model);
-  }
-
-  function models(models) {
-    app._models = [...app._models, ...models];
-  }
-
-  function reducerMiddleware(middleware) {
-    app._reducerMiddleware = middleware;
-  }
-
-  function start(app) {
-    const sagaMiddleware = cSagaMiddleware();
-    let initialState = {};
-    if (window.__INITIAL_STATE__) {
-      try {
-        initialState =
-          JSON.parse(Base64.decode(window.__INITIAL_STATE__)) || {};
-      } catch (e) {
-        console.error('parse window initial state error -> ', e);
-      }
-    }
-
-    const store = createStore({
-      reducers: reducerBuilder(app._models, onReducer),
-      initialState,
-      sagaMiddleware
-    });
-
-    app._store = store;
-    store.runSaga = sagaMiddleware.run;
-    const sagas = sagaBuilder(app._models, {onEffect, onFetchOption, history});
-    sagaMiddleware.run(sagas);
-    app._history = patchHistory(history);
-  }
-
-  function startWithContainer(container) {
-    if (typeof container === 'string') {
+  function start(container) {
+    if (isString(container)) {
       container = document.querySelector(container);
+      invariant(container, `[app.start] container ${container} not found`);
     }
+    invariant(
+      !container || isHTMLElement(container),
+      `[app.start] container should be HTMLElement`
+    );
+    invariant(
+      app._router,
+      `[app.router] router must be registered before app.start()`
+    );
+
     if (!app._store) {
-      start(app);
+      oldAppStart(app);
     }
 
     const store = app._store;
@@ -83,6 +54,10 @@ function App(opts ={}) {
   }
 
   function router(router) {
+    invariant(
+      isFunction(router),
+      `[app.router] router should be function, but got ${typeof router}`
+    );
     app._router = router;
   }
 }
