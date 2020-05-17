@@ -17,10 +17,22 @@ class Login extends Component {
         <section className='login-content'>
           <h2>用户登录</h2>
           <Form name='normal_login' className='login-form' onFinish={this.onFinish}>
-            <Form.Item name='username' rules={[{required: true, message: 'Please input your Username!'}]}>
+            <Form.Item
+              name='username'
+              initialValue='admin'
+              rules={[{required: true, message: 'Please input your Username!'}]}
+            >
               <Input prefix={<UserOutlined className='site-form-item-icon' />} placeholder='Username' />
             </Form.Item>
-            <Form.Item name='password' rules={[{required: true, message: 'Please input your Password!'}]}>
+            <Form.Item
+              name='password'
+              rules={[
+                {required: true, message: 'Please input your Password!'},
+                {min: 4, message: '最少4位'},
+                {max: 8, message: '最多8位'},
+                {pattern: /^[a-zA-Z0-9_]+$/, message: '密码格式不对'},
+              ]}
+            >
               <Input prefix={<LockOutlined className='site-form-item-icon' />} type='password' placeholder='Password' />
             </Form.Item>
 
