@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Form, Input, Button} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
+import {reqLogin} from '../../api';
 import './login.less';
 /**
  * 登录路由
@@ -8,6 +9,12 @@ import './login.less';
 class Login extends Component {
   onFinish = (values) => {
     console.log('Received values of form: ', values);
+    const {username, password} = values;
+    reqLogin(username, password)
+      .then((response) => {
+        console.log('login success', response);
+      })
+      .catch((err) => console.log('login失败', err));
   };
 
   render() {
@@ -17,11 +24,7 @@ class Login extends Component {
         <section className='login-content'>
           <h2>用户登录</h2>
           <Form name='normal_login' className='login-form' onFinish={this.onFinish}>
-            <Form.Item
-              name='username'
-              initialValue='admin'
-              rules={[{required: true, message: 'Please input your Username!'}]}
-            >
+            <Form.Item name='username' rules={[{required: true, message: 'Please input your Username!'}]}>
               <Input prefix={<UserOutlined className='site-form-item-icon' />} placeholder='Username' />
             </Form.Item>
             <Form.Item
