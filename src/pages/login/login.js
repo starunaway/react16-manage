@@ -1,19 +1,25 @@
 import React, {Component} from 'react';
-import {Form, Input, Button} from 'antd';
+import {Form, Input, Button, message} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import {reqLogin} from '../../api';
+import memoryUtils from '../../utils/memoryUtils';
 import './login.less';
 /**
  * 登录路由
  **/
 class Login extends Component {
   onFinish = async (values) => {
-    console.log('Received values of form: ', values);
     const {username, password} = values;
-    try {
-      const response = await reqLogin(username, password);
-      console.log(response);
-    } catch (err) {}
+    const result = await reqLogin(username, password);
+    if (result.status === 0) {
+      message.success('登录成功');
+      const user = result.data;
+
+      memoryUtils.user = user;
+      this.props.history.replace('/');
+    } else {
+      message.error(result.msg);
+    }
   };
 
   render() {
