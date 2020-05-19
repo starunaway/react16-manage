@@ -7,14 +7,13 @@ import './login.less';
  * 登录路由
  **/
 class Login extends Component {
-  onFinish = (values) => {
+  onFinish = async (values) => {
     console.log('Received values of form: ', values);
     const {username, password} = values;
-    reqLogin(username, password)
-      .then((response) => {
-        console.log('login success', response);
-      })
-      .catch((err) => console.log('login失败', err));
+    try {
+      const response = await reqLogin(username, password);
+      console.log(response);
+    } catch (err) {}
   };
 
   render() {
