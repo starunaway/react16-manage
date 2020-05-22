@@ -15,16 +15,6 @@ import {
 const {SubMenu} = Menu;
 
 class LeftNav extends Component {
-  state = {
-    collapsed: false,
-  };
-
-  toggleCollapsed = () => {
-    this.setState({
-      collapsed: !this.state.collapsed,
-    });
-  };
-
   render() {
     return (
       <div className='left-nav'>
@@ -32,7 +22,7 @@ class LeftNav extends Component {
           <img src={logo} alt='logo' />
           <h1>后台管理系统</h1>
         </Link>
-        <Menu mode='inline' theme='dark' inlineCollapsed={this.state.collapsed}>
+        <Menu mode='inline' theme='dark'>
           <Menu.Item key='1' icon={<PieChartOutlined />}>
             首页
           </Menu.Item>
