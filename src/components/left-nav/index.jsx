@@ -24,29 +24,32 @@ class LeftNav extends Component {
         </Link>
         <Menu mode='inline' theme='dark'>
           <Menu.Item key='1' icon={<PieChartOutlined />}>
-            首页
+            <Link to='/home'>首页</Link>
           </Menu.Item>
           <SubMenu key='sub1' icon={<MailOutlined />} title='商品'>
             <Menu.Item key='2' icon={<BarsOutlined />}>
-              品类管理
+              <Link to='/category'>品类管理</Link>
             </Menu.Item>
             <Menu.Item key='3' icon={<CodeSandboxOutlined />}>
-              商品管理
+              <Link to='/product'>商品管理</Link>
             </Menu.Item>
           </SubMenu>
           <Menu.Item key='4' icon={<UserOutlined />}>
-            用户管理
+            <Link to='/user'>用户管理</Link>
           </Menu.Item>
           <Menu.Item key='5' icon={<BellOutlined />}>
-            角色管理
+            <Link to='/role'>角色管理</Link>
           </Menu.Item>
 
           <SubMenu key='sub2' icon={<PieChartOutlined />} title='图形图表'>
             <Menu.Item key='6' icon={<MailOutlined />}>
-              品类管理
+              <Link to='/charts/bar'>柱状图</Link>
             </Menu.Item>
             <Menu.Item key='7' icon={<MailOutlined />}>
-              商品管理
+              <Link to='/charts/line'>线型图</Link>
+            </Menu.Item>
+            <Menu.Item key='8' icon={<MailOutlined />}>
+              <Link to='/charts/pie'>饼图</Link>
             </Menu.Item>
           </SubMenu>
         </Menu>
