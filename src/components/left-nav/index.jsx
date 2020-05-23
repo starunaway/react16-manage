@@ -8,6 +8,18 @@ import {Menu} from 'antd';
 const {SubMenu} = Menu;
 
 class LeftNav extends Component {
+  constructor(props) {
+    super(props);
+    // 这里是可以直接拿到url属性的
+  }
+  getOpenKeys = (item) => {
+    const {pathname} = this.props.location;
+    const cItem = item.children.find((child) => child.key === pathname);
+    if (cItem) {
+      this.openKey = item.key;
+    }
+  };
+
   getMenuNodes = (menuList) => {
     return menuList.reduce((pre, item) => {
       if (!item.children) {
@@ -17,6 +29,8 @@ class LeftNav extends Component {
           </Menu.Item>
         );
       } else {
+        this.getOpenKeys(item);
+
         pre.push(
           <SubMenu key={item.key} icon={item.icon} title={item.title}>
             {this.getMenuNodes_Map(item.children)}
@@ -36,6 +50,8 @@ class LeftNav extends Component {
           </Menu.Item>
         );
       } else {
+        this.getOpenKeys(item);
+
         return (
           <SubMenu key={item.key} icon={item.icon} title={item.title}>
             {this.getMenuNodes(item.children)}
@@ -45,6 +61,10 @@ class LeftNav extends Component {
     });
   };
 
+  UNSAFE_componentWillMount() {
+    this.menuNodes = this.getMenuNodes(menuList);
+  }
+
   render() {
     const {pathname} = this.props.location;
     return (
@@ -53,8 +73,8 @@ class LeftNav extends Component {
           <img src={logo} alt='logo' />
           <h1>后台管理系统</h1>
         </Link>
-        <Menu mode='inline' theme='dark' selectedKeys={[pathname]}>
-          {this.getMenuNodes(menuList)}
+        <Menu mode='inline' theme='dark' selectedKeys={[pathname]} defaultOpenKeys={[this.openKey]}>
+          {this.menuNodes}
         </Menu>
       </div>
     );
