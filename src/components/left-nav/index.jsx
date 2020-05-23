@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './index.less';
 import logo from '../../assets/images/logo.png';
+import menuList from '../../config/menuConfig';
 import {Link} from 'react-router-dom';
 import {Menu, Button} from 'antd';
 import {
@@ -15,6 +16,43 @@ import {
 const {SubMenu} = Menu;
 
 class LeftNav extends Component {
+  getMenuNodes = (menuList) => {
+    return menuList.reduce((pre, item) => {
+      if (!item.children) {
+        pre.push(
+          <Menu.Item key={item.key} icon={item.icon}>
+            <Link to={item.key}>{item.title}</Link>
+          </Menu.Item>
+        );
+      } else {
+        pre.push(
+          <SubMenu key={item.key} icon={item.icon} title={item.title}>
+            {this.getMenuNodes_Map(item.children)}
+          </SubMenu>
+        );
+      }
+      return pre;
+    }, []);
+  };
+
+  getMenuNodes_Map = (menuList) => {
+    return menuList.map((item) => {
+      if (!item.children) {
+        return (
+          <Menu.Item key={item.key} icon={item.icon}>
+            <Link to={item.key}>{item.title}</Link>
+          </Menu.Item>
+        );
+      } else {
+        return (
+          <SubMenu key={item.key} icon={item.icon} title={item.title}>
+            {this.getMenuNodes(item.children)}
+          </SubMenu>
+        );
+      }
+    });
+  };
+
   render() {
     return (
       <div className='left-nav'>
@@ -23,35 +61,7 @@ class LeftNav extends Component {
           <h1>后台管理系统</h1>
         </Link>
         <Menu mode='inline' theme='dark'>
-          <Menu.Item key='1' icon={<PieChartOutlined />}>
-            <Link to='/home'>首页</Link>
-          </Menu.Item>
-          <SubMenu key='sub1' icon={<MailOutlined />} title='商品'>
-            <Menu.Item key='2' icon={<BarsOutlined />}>
-              <Link to='/category'>品类管理</Link>
-            </Menu.Item>
-            <Menu.Item key='3' icon={<CodeSandboxOutlined />}>
-              <Link to='/product'>商品管理</Link>
-            </Menu.Item>
-          </SubMenu>
-          <Menu.Item key='4' icon={<UserOutlined />}>
-            <Link to='/user'>用户管理</Link>
-          </Menu.Item>
-          <Menu.Item key='5' icon={<BellOutlined />}>
-            <Link to='/role'>角色管理</Link>
-          </Menu.Item>
-
-          <SubMenu key='sub2' icon={<PieChartOutlined />} title='图形图表'>
-            <Menu.Item key='6' icon={<MailOutlined />}>
-              <Link to='/charts/bar'>柱状图</Link>
-            </Menu.Item>
-            <Menu.Item key='7' icon={<MailOutlined />}>
-              <Link to='/charts/line'>线型图</Link>
-            </Menu.Item>
-            <Menu.Item key='8' icon={<MailOutlined />}>
-              <Link to='/charts/pie'>饼图</Link>
-            </Menu.Item>
-          </SubMenu>
+          {this.getMenuNodes(menuList)}
         </Menu>
       </div>
     );
