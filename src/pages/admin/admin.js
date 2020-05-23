@@ -22,6 +22,7 @@ export default class Admin extends Component {
       // 当前没有登录
       return <Redirect to='/login'></Redirect>;
     }
+
     return (
       <Layout style={{height: '100%'}}>
         <Sider>

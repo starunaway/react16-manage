@@ -2,16 +2,8 @@ import React, {Component} from 'react';
 import './index.less';
 import logo from '../../assets/images/logo.png';
 import menuList from '../../config/menuConfig';
-import {Link} from 'react-router-dom';
-import {Menu, Button} from 'antd';
-import {
-  UserOutlined,
-  BellOutlined,
-  CodeSandboxOutlined,
-  BarsOutlined,
-  PieChartOutlined,
-  MailOutlined,
-} from '@ant-design/icons';
+import {Link, withRouter} from 'react-router-dom';
+import {Menu} from 'antd';
 
 const {SubMenu} = Menu;
 
@@ -54,13 +46,14 @@ class LeftNav extends Component {
   };
 
   render() {
+    const {pathname} = this.props.location;
     return (
       <div className='left-nav'>
         <Link to='/' className='left-nav-header'>
           <img src={logo} alt='logo' />
           <h1>后台管理系统</h1>
         </Link>
-        <Menu mode='inline' theme='dark'>
+        <Menu mode='inline' theme='dark' selectedKeys={[pathname]}>
           {this.getMenuNodes(menuList)}
         </Menu>
       </div>
@@ -68,4 +61,4 @@ class LeftNav extends Component {
   }
 }
 
-export default LeftNav;
+export default withRouter(LeftNav);
