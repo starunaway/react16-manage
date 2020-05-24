@@ -8,10 +8,8 @@ import {Menu} from 'antd';
 const {SubMenu} = Menu;
 
 class LeftNav extends Component {
-  constructor(props) {
-    super(props);
-    // 这里是可以直接拿到url属性的
-  }
+  // constructor 这里是可以直接拿到url属性的
+
   getOpenKeys = (item) => {
     const {pathname} = this.props.location;
     const cItem = item.children.find((child) => child.key === pathname);

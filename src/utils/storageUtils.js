@@ -12,6 +12,6 @@ export default {
   },
 
   removeUser() {
-    store.removeItem(USER_KEY);
+    store.remove(USER_KEY);
   },
 };
