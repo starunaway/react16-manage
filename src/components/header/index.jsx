@@ -39,7 +39,8 @@ class Header extends Component {
 
   getWeather = async () => {
     const result = await reqWeather('上海');
-    console.log(result);
+    const {dayPictureUrl, weather} = result;
+    this.setState({dayPictureUrl, weather});
   };
 
   getTitle = (props) => {

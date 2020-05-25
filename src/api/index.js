@@ -11,19 +11,32 @@ export const reqLogin = (username, password) => ajax(BASE_URL + '/login', {usern
 //添加用户
 export const reqAddUser = (user) => ajax(BASE_URL + '/manage/user/add', user, 'POST');
 
+// 请求天气
 export const reqWeather = (city) => {
   return new Promise((resolve, reject) => {
-    const url = `http://api.map.baidu.com/weather/telematics/v3/weather?location=${city}&ak=PUfsHehUYcLKztECaMZj96l6HGhKUx8N`;
+    const url = `http://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`;
+    // 发送jsonp请求
     jsonp(url, {}, (err, data) => {
-      console.log('jsonp', err, data);
+      // 如果成功了
       if (!err && data.status === 'success') {
-        const {dayPictureUrl, weather} = data.result[0].weather_data[0];
+        // 取出需要的数据
+        const {dayPictureUrl, weather} = data.results[0].weather_data[0];
         resolve({dayPictureUrl, weather});
       } else {
-        message.error('获取天气信息失败');
+        // 如果失败了
+        message.error('获取天气信息失败!');
       }
     });
   });
 };
 
-reqWeather('上海');
+// 请求一二级分类列表
+export const reqCategorys = (parentId) => ajax(BASE_URL + '/manage/category/list', {parentId}, 'GET');
+
+// 添加分类
+export const reqAddCategory = (categoryName, parentId) =>
+  ajax(BASE_URL + '/manage/category/add', {categoryName, parentId}, 'POST');
+
+//   更新分类
+export const reqUpdateCategory = (categoryId, categoryName) =>
+  ajax(BASE_URL + '/manage/category/update', {categoryId, categoryName}, 'POST');
