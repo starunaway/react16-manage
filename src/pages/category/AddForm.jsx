@@ -10,13 +10,11 @@ class AddForm extends Component {
   }
   render() {
     const {categorys, parentId} = this.props;
-    console.log('AddForm', categorys, parentId);
     return (
-      <Form ref={(ref) => (this.form = ref)} initialValues={{parentId}}>
+      <Form ref={(ref) => (this.form = ref)} initialValues={{parentId, categoryName: ''}}>
         <Item name='parentId'>
           <Select>
             <Option value='0'>一级分类</Option>
-
             {categorys.map((c) => (
               <Option value={c._id} key={c._id}>
                 {c.name}

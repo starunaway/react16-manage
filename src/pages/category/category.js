@@ -43,9 +43,9 @@ class Category extends Component {
   }
 
   //    异步获取一级或二级列表
-  getCategorys = async () => {
+  getCategorys = async (parentId) => {
     this.setState({loading: true});
-    const {parentId} = this.state;
+    parentId = parentId || this.state.parentId;
     const result = await reqCategorys(parentId);
 
     if (result.status === 0) {
@@ -91,7 +91,6 @@ class Category extends Component {
 
   addCategory = () => {
     //   隐藏弹窗
-    console.log(this.addForm);
     this.addForm
       .validateFields()
       .then(async (values) => {
@@ -116,9 +115,7 @@ class Category extends Component {
           }
         }
       })
-      .catch((error) => {
-        message.error(error);
-      });
+      .catch((error) => {});
   };
 
   updateCategory = () => {
@@ -139,9 +136,7 @@ class Category extends Component {
           this.getCategorys();
         }
       })
-      .catch((error) => {
-        message.error(error);
-      });
+      .catch((error) => {});
   };
 
   handleCancel = () => {
