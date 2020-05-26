@@ -3,6 +3,9 @@ import LinkButton from '../../components/link-button';
 import {PlusOutlined, ArrowRightOutlined} from '@ant-design/icons';
 import {Card, Table, Button, message, Modal} from 'antd';
 import {reqCategorys, reqAddCategory, reqUpdateCategory} from '../../api';
+import AddForm from './AddForm';
+import UpdateForm from './UpdateForm';
+
 class Category extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +28,7 @@ class Category extends Component {
         width: 300,
         render: (category) => (
           <span>
-            <LinkButton onClick={this.showUpdateModal}>修改分类</LinkButton>
+            <LinkButton onClick={() => this.showUpdateModal(category)}>修改分类</LinkButton>
             {this.state.parentId === '0' && (
               <LinkButton onClick={() => this.showSubCategorys(category)}>查看子分类</LinkButton>
             )}
@@ -44,7 +47,6 @@ class Category extends Component {
     this.setState({loading: true});
     const {parentId} = this.state;
     const result = await reqCategorys(parentId);
-    console.log(result);
 
     if (result.status === 0) {
       const categorys = result.data;
@@ -64,7 +66,9 @@ class Category extends Component {
         parentId: category._id,
         parentName: category.name,
       },
-      this.getCategorys()
+      () => {
+        this.getCategorys();
+      }
     );
   };
   showCategorys = () => {
@@ -79,20 +83,77 @@ class Category extends Component {
     this.setState({showStatus: 1});
   };
 
-  showUpdateModal = () => {
+  showUpdateModal = (category) => {
+    console.log('showUpdateModal', category);
+    this.category = category;
     this.setState({showStatus: 2});
   };
 
-  addCategory = () => {};
+  addCategory = () => {
+    //   隐藏弹窗
+    console.log(this.addForm);
+    this.addForm
+      .validateFields()
+      .then(async (values) => {
+        // 隐藏确认框
+        this.setState({
+          showStatus: 0,
+        });
 
-  updateCategory = (category) => {};
+        // 收集数据, 并提交添加分类的请求
+        const {parentId, categoryName} = values;
+        // 清除输入数据
+        this.addForm.resetFields();
+        const result = await reqAddCategory(categoryName, parentId);
+        if (result.status === 0) {
+          // 添加的分类就是当前分类列表下的分类
+          if (parentId === this.state.parentId) {
+            // 重新获取当前分类列表显示
+            this.getCategorys();
+          } else if (parentId === '0') {
+            // 在二级分类列表下添加一级分类, 重新获取一级分类列表, 但不需要显示一级列表
+            this.getCategorys('0');
+          }
+        }
+      })
+      .catch((error) => {
+        message.error(error);
+      });
+  };
+
+  updateCategory = () => {
+    this.updateForm
+      .validateFields()
+      .then(async (values) => {
+        // 隐藏确认框
+        this.setState({
+          showStatus: 0,
+        });
+
+        const categoryId = this.category._id;
+        const {categoryName} = values;
+
+        this.updateForm.resetFields();
+        const result = await reqUpdateCategory(categoryId, categoryName);
+        if (result.status === 0) {
+          this.getCategorys();
+        }
+      })
+      .catch((error) => {
+        message.error(error);
+      });
+  };
 
   handleCancel = () => {
+    this.addForm && this.addForm.resetFields();
+    this.updateForm && this.updateForm.resetFields();
+
     this.setState({showStatus: 0});
   };
 
   render() {
     const {categorys, loading, parentId, parentName, subCategorys, showStatus} = this.state;
+    const category = this.category || {};
     const title =
       parentId === '0' ? (
         '一级分类列表'
@@ -127,15 +188,22 @@ class Category extends Component {
         </Card>
 
         <Modal title='添加分类' visible={showStatus === 1} onOk={this.addCategory} onCancel={this.handleCancel}>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <AddForm
+            setForm={(form) => {
+              this.addForm = form;
+            }}
+            parentId={parentId}
+            categorys={categorys}
+          ></AddForm>
         </Modal>
 
         <Modal title='更新分类' visible={showStatus === 2} onOk={this.updateCategory} onCancel={this.handleCancel}>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <UpdateForm
+            categoryName={category.name}
+            setForm={(form) => {
+              this.updateForm = form;
+            }}
+          ></UpdateForm>
         </Modal>
       </div>
     );
