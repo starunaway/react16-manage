@@ -60,7 +60,10 @@ class Category extends Component {
     }
   };
 
+  //  查看子分类
   showSubCategorys = (category) => {
+    this.category = category;
+    console.log('查看子分类', category);
     this.setState(
       {
         parentId: category._id,
@@ -71,6 +74,7 @@ class Category extends Component {
       }
     );
   };
+  //   显示一级分类
   showCategorys = () => {
     this.setState({
       parentId: '0',
@@ -80,12 +84,22 @@ class Category extends Component {
   };
 
   showAddModal = () => {
+    console.log('showAddModal', this.category, this.state);
+
     this.setState({showStatus: 1});
+    this.addForm &&
+      this.addForm.setFieldsValue({
+        parentId: this.category._id,
+      });
   };
 
   showUpdateModal = (category) => {
     console.log('showUpdateModal', category);
     this.category = category;
+    this.updateForm &&
+      this.updateForm.setFieldsValue({
+        categoryName: this.category.name,
+      });
     this.setState({showStatus: 2});
   };
 

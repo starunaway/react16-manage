@@ -10,6 +10,7 @@ class AddForm extends Component {
   }
   render() {
     const {categorys, parentId} = this.props;
+    console.log(categorys, parentId);
     return (
       <Form ref={(ref) => (this.form = ref)} initialValues={{parentId, categoryName: ''}}>
         <Item name='parentId'>
