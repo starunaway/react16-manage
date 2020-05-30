@@ -60,7 +60,7 @@ class Category extends Component {
     }
   };
 
-  //  查看子分类
+  //  显示子分类列表
   showSubCategorys = (category) => {
     this.category = category;
     console.log('查看子分类', category);
@@ -76,6 +76,9 @@ class Category extends Component {
   };
   //   显示一级分类
   showCategorys = () => {
+    this.category = {
+      _id: '0',
+    };
     this.setState({
       parentId: '0',
       parentName: '',
@@ -93,16 +96,6 @@ class Category extends Component {
       });
   };
 
-  showUpdateModal = (category) => {
-    console.log('showUpdateModal', category);
-    this.category = category;
-    this.updateForm &&
-      this.updateForm.setFieldsValue({
-        categoryName: this.category.name,
-      });
-    this.setState({showStatus: 2});
-  };
-
   addCategory = () => {
     //   隐藏弹窗
     this.addForm
@@ -117,6 +110,7 @@ class Category extends Component {
         const {parentId, categoryName} = values;
         // 清除输入数据
         this.addForm.resetFields();
+
         const result = await reqAddCategory(categoryName, parentId);
         if (result.status === 0) {
           // 添加的分类就是当前分类列表下的分类
@@ -132,6 +126,16 @@ class Category extends Component {
       .catch((error) => {});
   };
 
+  showUpdateModal = (category) => {
+    console.log('showUpdateModal', category);
+    this.category = category;
+    this.updateForm &&
+      this.updateForm.setFieldsValue({
+        categoryName: this.category.name,
+      });
+    this.setState({showStatus: 2});
+  };
+
   updateCategory = () => {
     this.updateForm
       .validateFields()
@@ -144,7 +148,7 @@ class Category extends Component {
         const categoryId = this.category._id;
         const {categoryName} = values;
 
-        this.updateForm.resetFields();
+        // this.updateForm.resetFields();
         const result = await reqUpdateCategory(categoryId, categoryName);
         if (result.status === 0) {
           this.getCategorys();
@@ -154,8 +158,8 @@ class Category extends Component {
   };
 
   handleCancel = () => {
-    this.addForm && this.addForm.resetFields();
-    this.updateForm && this.updateForm.resetFields();
+    // this.addForm && this.addForm.resetFields();
+    // this.updateForm && this.updateForm.resetFields();
 
     this.setState({showStatus: 0});
   };
