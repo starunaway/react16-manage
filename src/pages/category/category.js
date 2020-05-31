@@ -92,7 +92,7 @@ class Category extends Component {
     this.setState({showStatus: 1});
     this.addForm &&
       this.addForm.setFieldsValue({
-        parentId: this.category._id,
+        parentId: this.category.parentId === '0' ? this.category._id : this.category.parentId,
       });
   };
 
@@ -158,8 +158,8 @@ class Category extends Component {
   };
 
   handleCancel = () => {
-    // this.addForm && this.addForm.resetFields();
-    // this.updateForm && this.updateForm.resetFields();
+    this.addForm && this.addForm.resetFields();
+    this.updateForm && this.updateForm.resetFields();
 
     this.setState({showStatus: 0});
   };
