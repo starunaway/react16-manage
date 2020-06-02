@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Button, Input} from 'antd';
+import {Button, Input, Card, Icon, List} from 'antd';
+import LinkButton from '../../components/link-button';
 
 class ProductDetail extends Component {
   render() {
