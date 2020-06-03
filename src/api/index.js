@@ -57,3 +57,6 @@ export const reqSearchProducts = ({pageNum, pageSize, searchName, searchType}) =
 // 更新商品的状态(上架/下架)
 export const reqUpdateStatus = (productId, status) =>
   ajax(BASE_URL + '/manage/product/updateStatus', {productId, status}, 'POST');
+
+// 获取一个商品分类
+export const reqCategory = (categoryId) => ajax(BASE_URL + '/manage/category/info', {categoryId});

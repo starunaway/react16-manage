@@ -28,7 +28,7 @@ class ProductHome extends Component {
       {dataIndex: 'desc', title: '商品描述'},
       {dataIndex: 'price', title: '价格', render: (price) => `￥${price}`},
       {
-        dataIndex: 'status',
+        // dataIndex: 'status',
         title: '状态',
         width: 100,
 
