@@ -64,7 +64,10 @@ class LeftNav extends Component {
   }
 
   render() {
-    const {pathname} = this.props.location;
+    let {pathname} = this.props.location;
+    if (pathname.indexOf('/product') === 0) {
+      pathname = '/product';
+    }
     return (
       <div className='left-nav'>
         <Link to='/' className='left-nav-header'>
