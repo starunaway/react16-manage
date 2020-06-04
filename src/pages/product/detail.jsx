@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Card, Icon, List} from 'antd';
+import {Card, List} from 'antd';
 import {reqCategory} from '../../api';
 import {BASE_IMG_URL} from '../../utils/constants';
 import {ArrowLeftOutlined} from '@ant-design/icons';

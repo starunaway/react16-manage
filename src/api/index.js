@@ -60,3 +60,7 @@ export const reqUpdateStatus = (productId, status) =>
 
 // 获取一个商品分类
 export const reqCategory = (categoryId) => ajax(BASE_URL + '/manage/category/info', {categoryId});
+
+// 添加/修改商品
+export const reqAddOrUpdateProduct = (product) =>
+  ajax(BASE_URL + '/manage/product/' + (product._id ? 'update' : 'add'), product, 'POST');
