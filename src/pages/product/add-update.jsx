@@ -66,7 +66,7 @@ class ProductAddUpdate extends Component {
   };
 
   /*
-  异步获取一级/二级分类列表, 并显示
+  获取一级/二级分类列表
   async函数的返回值是一个新的promise对象, promise的结果和值由async的结果来决定
    */
   getCategorys = async (parentId) => {
@@ -77,8 +77,8 @@ class ProductAddUpdate extends Component {
       if (parentId === '0') {
         this.initOptions(categorys);
       } else {
-        // 二级列表
-        return categorys; // 返回二级列表 ==> 当前async函数返回的promsie就会成功且value为categorys
+        // 返回二级列表 ==> 当前async函数返回的promsie就会成功且value为categorys
+        return categorys;
       }
     }
   };
@@ -88,7 +88,7 @@ class ProductAddUpdate extends Component {
     // 显示loading
     targetOption.loading = true;
 
-    // 根据选中的分类, 请求获取二级分类列表
+    // getCategorys 是个async ，需要await 获取
     const subCategorys = await this.getCategorys(targetOption.value);
     // 隐藏loading
     targetOption.loading = false;
