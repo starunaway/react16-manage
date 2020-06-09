@@ -22,7 +22,7 @@ class ProductAddUpdate extends Component {
     this.getCategorys('0');
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     // 取出携带的state
     const product = this.props.location.state; // 如果是添加没值, 否则有值
     // 保存是否是更新的标识
@@ -113,7 +113,6 @@ class ProductAddUpdate extends Component {
     });
   };
   validatePrice = (rule, value, callback) => {
-    console.log(value, typeof value);
     if (value * 1 > 0) {
       callback(); // 验证通过
     } else {
@@ -126,7 +125,6 @@ class ProductAddUpdate extends Component {
     this.form.validateFields().then(async (values) => {
       // 1. 收集数据, 并封装成product对象
       console.log('submit');
-      return;
       const {name, desc, price, categoryIds} = values;
       let pCategoryId, categoryId;
       if (categoryIds.length === 1) {
@@ -136,8 +134,11 @@ class ProductAddUpdate extends Component {
         pCategoryId = categoryIds[0];
         categoryId = categoryIds[1];
       }
+
       debugger;
-      const imgs = this.pw.current.getImgs();
+      //   如果是 通过 React.createRef()创建的，需要 使用this.pw.current 才能获取当前子组件的属性
+      const imgs = this.pw.getImgs();
+      return;
       const detail = this.editor.current.getDetail();
 
       const product = {name, desc, price, imgs, detail, pCategoryId, categoryId};
@@ -225,6 +226,7 @@ class ProductAddUpdate extends Component {
           </Item>
           <Item label='商品图片'>
             <PicturesWall ref={(ref) => (this.pw = ref)} imgs={imgs} />
+            {/* <PicturesWall ref={this.pw} imgs={imgs} /> */}
           </Item>
           <Item label='商品详情' labelCol={{span: 4}} wrapperCol={{span: 20}}>
             <RichTextEditor ref={(ref) => (this.editor = ref)} detail={detail} />

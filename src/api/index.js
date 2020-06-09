@@ -64,3 +64,6 @@ export const reqCategory = (categoryId) => ajax(BASE_URL + '/manage/category/inf
 // 添加/修改商品
 export const reqAddOrUpdateProduct = (product) =>
   ajax(BASE_URL + '/manage/product/' + (product._id ? 'update' : 'add'), product, 'POST');
+
+// 删除指定名称的图片
+export const reqDeleteImg = (name) => ajax(BASE_URL + '/manage/img/delete', {name}, 'POST');
