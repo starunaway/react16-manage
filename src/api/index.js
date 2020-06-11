@@ -67,3 +67,10 @@ export const reqAddOrUpdateProduct = (product) =>
 
 // 删除指定名称的图片
 export const reqDeleteImg = (name) => ajax(BASE_URL + '/manage/img/delete', {name}, 'POST');
+
+// 获取所有角色的列表
+export const reqRoles = () => ajax(BASE_URL + '/manage/role/list');
+// 添加角色
+export const reqAddRole = (roleName) => ajax(BASE_URL + '/manage/role/add', {roleName}, 'POST');
+// 添加角色
+export const reqUpdateRole = (role) => ajax(BASE_URL + '/manage/role/update', role, 'POST');
