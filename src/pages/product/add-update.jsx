@@ -135,11 +135,9 @@ class ProductAddUpdate extends Component {
         categoryId = categoryIds[1];
       }
 
-      debugger;
       //   如果是 通过 React.createRef()创建的，需要 使用this.pw.current 才能获取当前子组件的属性
       const imgs = this.pw.getImgs();
-      return;
-      const detail = this.editor.current.getDetail();
+      const detail = this.editor.getDetail();
 
       const product = {name, desc, price, imgs, detail, pCategoryId, categoryId};
 
