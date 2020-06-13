@@ -16,9 +16,63 @@ class Role extends Component {
       isShowAdd: false, // 是否显示添加界面
       isShowAuth: false, // 是否显示设置权限界面
     };
+    this.columns = this.initColumns();
   }
+
+  initColumns = () => {
+    return [
+      {
+        title: '角色名称',
+        dataIndex: 'name',
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'craate_time',
+      },
+      {
+        title: '授权时间',
+        dataIndex: 'auth_time',
+      },
+      {
+        title: '授权人',
+        dataIndex: 'auth_name',
+      },
+    ];
+  };
+
+  onRow = (role) => {
+    return {
+      onClick: (event) => {},
+    };
+  };
+
   render() {
-    return <div className='header'>Role</div>;
+    const {roles} = this.state;
+
+    const title = (
+      <span>
+        {' '}
+        <Button type='primary'>创建角色</Button>
+        <Button type='primary'>设置角色权限</Button>
+      </span>
+    );
+    return (
+      <Card title={title}>
+        <Table
+          bordered
+          rowKey='_id'
+          dataSource={roles}
+          columns={this.columns}
+          rowSelection={{
+            type: 'radio',
+          }}
+          onRow={this.onRow}
+          pagination={{
+            defaultPageSize: PAGE_SIZE,
+          }}
+        ></Table>
+      </Card>
+    );
   }
 }
 
