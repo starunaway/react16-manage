@@ -28,12 +28,16 @@ class Role extends Component {
       },
       {
         title: '创建时间',
-        dataIndex: 'craate_time',
-        render: (create_time) => moment(create_time).format('YYYY-MM-DD HH:mm:ss'),
+        dataIndex: 'create_time',
+        render: (create_time) => {
+          let c = moment(create_time).format('YYYY-MM-DD HH:mm:ss');
+          return c;
+        },
       },
       {
         title: '授权时间',
         dataIndex: 'auth_time',
+        render: (auth_time) => (auth_time ? moment(auth_time).format('YYYY-MM-DD HH:mm:ss') : ''),
       },
       {
         title: '授权人',
@@ -135,6 +139,8 @@ class Role extends Component {
   onRow = (role) => {
     return {
       onClick: (event) => {
+        console.log('onRow onClick', role);
+
         this.setState({
           role,
         });
