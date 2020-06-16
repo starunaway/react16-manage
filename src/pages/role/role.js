@@ -65,7 +65,9 @@ class Role extends Component {
 
       // 收集输入数据
       const {roleName} = values;
-      this.form.resetFields();
+      this.form.setFieldsValue({
+        roleName: '',
+      });
 
       // 请求添加
       const result = await reqAddRole(roleName);
@@ -183,11 +185,18 @@ class Role extends Component {
           visible={isShowAdd}
           onOk={this.addRole}
           onCancel={() => {
-            this.setState({isShowAdd: false});
-            this.form.resetFields();
+            this.setState({isShowAdd: false}, () => {
+              this.form.setFieldsValue({
+                roleName: '',
+              });
+            });
           }}
         >
-          <AddForm setForm={(form) => (this.form = form)} />
+          <AddForm
+            setForm={(form) => {
+              this.form = form;
+            }}
+          />
         </Modal>
         <Modal
           title='设置角色权限'
