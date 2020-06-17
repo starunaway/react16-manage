@@ -8,8 +8,9 @@ const {TreeNode} = Tree;
 export default class AuthForm extends PureComponent {
   constructor(props) {
     super(props);
+    console.log('constructor', props.role);
     this.state = {
-      checkedKeys: this.props.role,
+      checkedKeys: props.role.menus,
     };
   }
 
@@ -52,7 +53,7 @@ export default class AuthForm extends PureComponent {
   render() {
     const {role} = this.props;
     const {checkedKeys} = this.state;
-    console.log('render', role, checkedKeys);
+    console.log('render', checkedKeys);
 
     // 指定Item布局的配置对象
     const formItemLayout = {
