@@ -139,8 +139,6 @@ class Role extends Component {
   onRow = (role) => {
     return {
       onClick: (event) => {
-        console.log('onRow onClick', role);
-
         this.setState({
           role,
         });

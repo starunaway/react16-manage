@@ -8,15 +8,21 @@ const {TreeNode} = Tree;
 export default class AuthForm extends PureComponent {
   constructor(props) {
     super(props);
-    console.log('constructor', props.role);
     this.state = {
       checkedKeys: props.role.menus,
     };
   }
 
-  /*
-  为父组件提交获取最新menus数据的方法
-   */
+  componentWillMount() {
+    this.treeNodes = this.getTreeNodes(menuList);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      checkedKeys: nextProps.role.menus,
+    });
+  }
+
   getMenus = () => this.state.checkedKeys;
 
   getTreeNodes = (menuList) => {
@@ -35,26 +41,9 @@ export default class AuthForm extends PureComponent {
     this.setState({checkedKeys});
   };
 
-  componentWillMount() {
-    this.treeNodes = this.getTreeNodes(menuList);
-  }
-
-  // 根据新传入的role来更新checkedKeys状态
-  /*
-  当组件接收到新的属性时自动调用
-   */
-  componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps', nextProps);
-    this.setState({
-      checkedKeys: nextProps.role.menus,
-    });
-  }
-
   render() {
     const {role} = this.props;
     const {checkedKeys} = this.state;
-    console.log('render', checkedKeys);
-
     // 指定Item布局的配置对象
     const formItemLayout = {
       labelCol: {span: 4}, // 左侧label的宽度
