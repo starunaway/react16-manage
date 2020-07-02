@@ -11,13 +11,10 @@ export default class AuthForm extends PureComponent {
     this.state = {
       checkedKeys: props.role.menus,
     };
-  }
-
-  componentWillMount() {
     this.treeNodes = this.getTreeNodes(menuList);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
       checkedKeys: nextProps.role.menus,
     });

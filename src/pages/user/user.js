@@ -13,9 +13,6 @@ class User extends Component {
       roles: [], // 所有角色列表
       isShow: false, // 是否显示确认框
     };
-  }
-
-  componentWillMount() {
     this.initColumns();
   }
 
@@ -41,7 +38,7 @@ class User extends Component {
       {
         title: '注册时间',
         dataIndex: 'create_time',
-        render: formateDate,
+        render: (date) => moment(date).format('YYYY-MM-DD'),
       },
       {
         title: '所属角色',
@@ -94,20 +91,23 @@ class User extends Component {
     });
   };
 
+  setFormField = (user) => {
+    this.form &&
+      this.form.setFieldsValue({
+        username: user.username,
+        password: user.password,
+        phone: user.phone,
+        email: user.email,
+        role_id: user.role_id,
+      });
+  };
+
   addOrUpdateUser = async () => {
+    const user = this.form.getFieldsValue() || {};
+    // const user = this.user || {};
+
+    this.setFormField({});
     this.setState({isShow: false});
-
-    const user = this.form.getFieldsValue();
-    const user = this.user || {};
-
-    this.form.setFieldsValue({
-      username: user.username,
-      password: user.password,
-      phone: user.phone,
-      email: user.email,
-      role_id: user.role_id,
-    });
-
     // 如果是更新, 需要给user指定_id属性
     if (this.user) {
       user._id = this.user._id;
@@ -129,28 +129,19 @@ class User extends Component {
 
   showUpdate = (user) => {
     this.user = user; // 保存user
+    this.setFormField(user);
     this.setState({
       isShow: true,
     });
   };
 
   handleModalClose = () => {
-    this.setState({isShow: false}, () => {
-      const user = this.user || {};
-
-      this.form.setFieldsValue({
-        username: user.username,
-        password: user.password,
-        phone: user.phone,
-        email: user.email,
-        role_id: user.role_id,
-      });
-    });
+    this.setState({isShow: false}, () => {});
+    this.setFormField({});
   };
 
   render() {
     const {users, roles, isShow} = this.state;
-    const user = this.user || {};
     const title = (
       <Button type='primary' onClick={this.showAdd}>
         创建用户
@@ -161,12 +152,18 @@ class User extends Component {
         <Table bordered rowKey='_id' dataSource={users} columns={this.columns} pagination={{defaultPageSize: 2}} />
 
         <Modal
-          title={user._id ? '修改用户' : '添加用户'}
+          title={(this.user || {})._id ? '修改用户' : '添加用户'}
           visible={isShow}
           onOk={this.addOrUpdateUser}
           onCancel={this.handleModalClose}
         >
-          <UserForm setForm={(form) => (this.form = form)} roles={roles} user={user} />
+          <UserForm
+            setForm={(form) => {
+              this.form = form;
+            }}
+            roles={roles}
+            user={this.user || {}}
+          />
         </Modal>
       </Card>
     );

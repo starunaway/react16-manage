@@ -5,7 +5,7 @@ const Item = Form.Item;
 const Option = Select.Option;
 
 class UserForm extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.setForm(this.form);
   }
 
