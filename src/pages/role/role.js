@@ -18,6 +18,8 @@ class Role extends Component {
       isShowAuth: false, // 是否显示设置权限界面
     };
     this.columns = this.initColumns();
+    // 用createRef创建的ref ，属性需要从ref.current里面取
+    //  this.form = React.createRef()
   }
 
   initColumns = () => {
