@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons';
 
 const menuList = [
-  {title: '首页', key: '/home', icon: <PieChartOutlined />},
+  {title: '首页', key: '/home', icon: <PieChartOutlined />, isPublic: true},
   {
     title: '商品',
     key: '/products',
