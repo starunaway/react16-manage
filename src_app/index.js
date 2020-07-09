@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
+import App from './App';
+
 import storageUtils from './utils/storageUtils';
 import memoryUtils from './utils/memoryUtils';
-import store from './redux/store';
-import App from './App';
 
 const user = storageUtils.getUser();
 memoryUtils.user = user;
