@@ -20,6 +20,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "store": "^2.0.12"
   },
   "scripts": {
@@ -48,7 +49,8 @@
     "customize-cra": "^0.9.1",
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
-    "react-app-rewired": "^2.1.6"
+    "react-app-rewired": "^2.1.6",
+    "redux-devtools-extension": "^2.13.8"
   },
   "proxy": "http://192.168.198.138:5000"
 }
