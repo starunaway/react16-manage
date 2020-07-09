@@ -5,7 +5,8 @@ import menuList from '../../config/menuConfig';
 import {Link, withRouter} from 'react-router-dom';
 import {Menu} from 'antd';
 import memoryUtils from '../../utils/memoryUtils';
-
+import {connect} from 'react-redux';
+import {setHeadTitle} from '../../redux/actions';
 const {SubMenu} = Menu;
 
 class LeftNav extends Component {
@@ -43,9 +44,22 @@ class LeftNav extends Component {
     return menuList.reduce((pre, item) => {
       if (this.hasAuth(item)) {
         if (!item.children) {
+          const {pathname} = this.props.location;
+
+          if (item.key === pathname || pathname.indexOf(item.key) === 0) {
+            this.props.setHeadTitle(item.title);
+          }
           pre.push(
             <Menu.Item key={item.key} icon={item.icon}>
-              <Link to={item.key}>{item.title}</Link>
+              <Link
+                to={item.key}
+                onClick={() => {
+                  console.log(item);
+                  this.props.setHeadTitle(item.title);
+                }}
+              >
+                {item.title}
+              </Link>
             </Menu.Item>
           );
         } else {
@@ -106,4 +120,9 @@ class LeftNav extends Component {
   }
 }
 
-export default withRouter(LeftNav);
+export default connect(
+  (state) => {
+    return {};
+  },
+  {setHeadTitle}
+)(withRouter(LeftNav));

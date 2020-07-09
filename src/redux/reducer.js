@@ -3,6 +3,8 @@ import storageUtils from '../utils/storageUtils';
 
 function headTitle(state = '首页', action) {
   switch (action.type) {
+    case 'setHeadTitle':
+      return action.data;
     default:
       return state;
   }

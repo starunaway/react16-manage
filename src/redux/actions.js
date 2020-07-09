@@ -1,13 +1,7 @@
-export const increment = (number) => {
+export const setHeadTitle = (title) => {
+  console.log('setHeadTitle', title);
   return {
-    type: 'INCREMENT',
-    data: number,
-  };
-};
-
-export const decrement = (number) => {
-  return {
-    type: 'DECREMENT',
-    data: number,
+    type: 'setHeadTitle',
+    data: title,
   };
 };

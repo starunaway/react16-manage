@@ -4,11 +4,11 @@ import {withRouter} from 'react-router-dom';
 import memoryUtils from '../../utils/memoryUtils';
 import storageUtils from '../../utils/storageUtils';
 import LinkButton from '../link-button';
-
 import {reqWeather} from '../../api';
 import {Modal} from 'antd';
 import menuList from '../../config/menuConfig';
 import './index.less';
+import {connect} from 'react-redux';
 
 class Header extends Component {
   constructor(props) {
@@ -73,7 +73,8 @@ class Header extends Component {
   render() {
     const {username} = memoryUtils.user;
 
-    const title = this.getTitle(this.props);
+    const title = this.props.headTitle;
+    // const title = this.getTitle(this.props);
     return (
       <div className='header'>
         <div className='header-top'>
@@ -93,4 +94,4 @@ class Header extends Component {
   }
 }
 
-export default withRouter(Header);
+export default connect((state) => ({headTitle: state.headTitle}), {})(withRouter(Header));

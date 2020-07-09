@@ -24,7 +24,7 @@ class Login extends Component {
       //   保存到本地
       storageUtils.saveUser(user);
 
-      this.props.history.replace('/');
+      this.props.history.replace('/home');
     } else {
       message.error(result.msg);
     }
