@@ -18,7 +18,7 @@ class App extends Component {
 
   render() {
     console.log(this.props.store.getState());
-    const count = this.props.store.getState();
+    const count = this.props.store.getState().count;
     return (
       <div>
         <span>value is: {count}</span>

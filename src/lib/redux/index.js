@@ -31,5 +31,11 @@ export function createStore(reducer) {
 
 // 将多个reducer函数整合
 export function combineReducers(reducers) {
-  return (state, action) => {};
+  return (state = {}, action) => {
+    const newState = {};
+    Object.keys(reducers).forEach((key) => {
+      newState[key] = reducers[key](state[key], action);
+    });
+    return newState;
+  };
 }
