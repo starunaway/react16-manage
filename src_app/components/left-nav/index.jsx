@@ -4,8 +4,8 @@ import logo from '../../assets/images/logo.png';
 import menuList from '../../config/menuConfig';
 import {Link, withRouter} from 'react-router-dom';
 import {Menu} from 'antd';
-import {connect} from 'react-redux';
-import {setHeadTitle} from '../../redux/actions';
+import memoryUtils from '../../utils/memoryUtils';
+
 const {SubMenu} = Menu;
 
 class LeftNav extends Component {
@@ -13,10 +13,10 @@ class LeftNav extends Component {
 
   hasAuth = (item) => {
     const {key, isPublic} = item;
-    const {user} = this.props;
-    const menus = (user || {}).role || {}.menus;
 
-    const username = (user || {}).username;
+    const menus = ((memoryUtils.user || {}).role || {}).menus;
+
+    const username = (memoryUtils.user || {}).username;
     /*
     1. 如果当前用户是admin
     2. 如果当前item是公开的
@@ -43,21 +43,9 @@ class LeftNav extends Component {
     return menuList.reduce((pre, item) => {
       if (this.hasAuth(item)) {
         if (!item.children) {
-          const {pathname} = this.props.location;
-          if (item.key === pathname || pathname.indexOf(item.key) === 0) {
-            this.props.setHeadTitle(item.title);
-          }
           pre.push(
             <Menu.Item key={item.key} icon={item.icon}>
-              <Link
-                to={item.key}
-                onClick={() => {
-                  console.log(item);
-                  this.props.setHeadTitle(item.title);
-                }}
-              >
-                {item.title}
-              </Link>
+              <Link to={item.key}>{item.title}</Link>
             </Menu.Item>
           );
         } else {
@@ -65,7 +53,7 @@ class LeftNav extends Component {
 
           pre.push(
             <SubMenu key={item.key} icon={item.icon} title={item.title}>
-              {this.getMenuNodes(item.children)}
+              {this.getMenuNodes_Map(item.children)}
             </SubMenu>
           );
         }
@@ -118,11 +106,4 @@ class LeftNav extends Component {
   }
 }
 
-export default connect(
-  (state) => {
-    return {
-      user: state.user,
-    };
-  },
-  {setHeadTitle}
-)(withRouter(LeftNav));
+export default withRouter(LeftNav);

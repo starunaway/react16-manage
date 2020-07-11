@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import memoryUtils from '../../utils/memoryUtils';
 import LeftNav from '../../components/left-nav';
 import Header from '../../components/header';
 import {Layout} from 'antd';
@@ -12,12 +11,12 @@ import User from '../user/user';
 import Bar from '../charts/bar';
 import Line from '../charts/line';
 import Pie from '../charts/pie';
-
+import {connect} from 'react-redux';
 const {Footer, Sider, Content} = Layout;
 
-export default class Admin extends Component {
+class Admin extends Component {
   render() {
-    const user = memoryUtils.user;
+    const user = this.props.user;
     if (!user || !user._id) {
       // 当前没有登录
       return <Redirect to='/login'></Redirect>;
@@ -49,3 +48,5 @@ export default class Admin extends Component {
     );
   }
 }
+
+export default connect((state) => ({user: state.user}))(Admin);

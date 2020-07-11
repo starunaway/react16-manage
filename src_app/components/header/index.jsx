@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import moment from 'moment';
 import {withRouter} from 'react-router-dom';
+import memoryUtils from '../../utils/memoryUtils';
+import storageUtils from '../../utils/storageUtils';
 import LinkButton from '../link-button';
+
 import {reqWeather} from '../../api';
 import {Modal} from 'antd';
 import menuList from '../../config/menuConfig';
 import './index.less';
-import {logout} from '../../redux/actions';
-import {connect} from 'react-redux';
 
 class Header extends Component {
   constructor(props) {
@@ -62,17 +63,17 @@ class Header extends Component {
     Modal.confirm({
       content: '确定退出吗？',
       onOk: () => {
-        this.props.logout();
-        // this.props.history.replace('/login');
+        storageUtils.removeUser();
+        memoryUtils.user = {};
+        this.props.history.replace('/login');
       },
     });
   };
 
   render() {
-    const {username} = this.props.user;
+    const {username} = memoryUtils.user;
 
-    const title = this.props.headTitle;
-    // const title = this.getTitle(this.props);
+    const title = this.getTitle(this.props);
     return (
       <div className='header'>
         <div className='header-top'>
@@ -92,4 +93,4 @@ class Header extends Component {
   }
 }
 
-export default connect((state) => ({headTitle: state.headTitle, user: state.user}), {logout})(withRouter(Header));
+export default withRouter(Header);
