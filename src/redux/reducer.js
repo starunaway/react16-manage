@@ -2,7 +2,6 @@ import {combineReducers} from '../lib/redux';
 
 // export default combineReducers({count});
 function count(state = 1, action) {
-  console.log('count', state, action);
   switch (action.type) {
     case 'increment':
       return state + action.data;
@@ -14,8 +13,6 @@ function count(state = 1, action) {
 }
 
 function user(state = {}, action) {
-  console.log('user', state, action);
-
   switch (action.type) {
     default:
       return state;

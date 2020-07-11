@@ -1,24 +1,25 @@
 import React, {Component} from 'react';
-import {increment, decrement, asyncIncrement} from './redux/actions.js';
+import {connect} from './lib/react-redux';
+
+import {increment, decrement} from './redux/actions.js';
 
 class App extends Component {
   handleIncrement = () => {
-    this.props.store.dispatch(increment(1));
+    this.props.increment(1);
   };
   handleDecrement = () => {
-    this.props.store.dispatch(decrement(1));
+    this.props.decrement(1);
   };
 
   handleAsyncIncrement = () => {
     setTimeout(() => {
-      this.props.store.dispatch(increment(1));
+      this.props.increment(1);
     }, 2000);
     // this.props.store.dispatch(asyncIncrement(1));
   };
 
   render() {
-    console.log(this.props.store.getState());
-    const count = this.props.store.getState().count;
+    const count = this.props.count;
     return (
       <div>
         <span>value is: {count}</span>
@@ -30,4 +31,13 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => ({count: state.count});
+const mapDispatchToProps1 = {increment, decrement};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    increment: (number) => dispatch(increment(number)),
+    decrement: (number) => dispatch(decrement(number)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps1)(App);
