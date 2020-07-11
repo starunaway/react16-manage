@@ -14,6 +14,16 @@ const initUser = storageUtils.getUser();
 
 function user(state = initUser, action) {
   switch (action.type) {
+    case 'receiveUser':
+      return action.user;
+    case 'showErrMsg':
+      return {
+        ...state,
+        errMsg: action.errMsg,
+      };
+    case 'resetUser':
+      storageUtils.removeUser();
+      return {};
     default:
       return state;
   }

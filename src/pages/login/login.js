@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
 import {Form, Input, Button, message} from 'antd';
 import {Redirect} from 'react-router-dom';
-
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
-import {reqLogin} from '../../api';
-import memoryUtils from '../../utils/memoryUtils';
-import storageUtils from '../../utils/storageUtils';
+import {connect} from 'react-redux';
+import {login} from '../../redux/actions';
 
 import './login.less';
 /**
@@ -14,27 +12,21 @@ import './login.less';
 class Login extends Component {
   onFinish = async (values) => {
     const {username, password} = values;
-    const result = await reqLogin(username, password);
-    if (result.status === 0) {
-      message.success('登录成功');
-      const user = result.data;
-
-      //   保存到内存中
-      memoryUtils.user = user;
-      //   保存到本地
-      storageUtils.saveUser(user);
-
-      this.props.history.replace('/home');
-    } else {
-      message.error(result.msg);
-    }
+    this.props.login(username, password);
   };
+  componentWillReceiveProps(nextProps) {
+    const user = nextProps.user;
+    if (user && user.errMsg) {
+      message.error(user.errMsg);
+    }
+  }
 
   render() {
-    const user = memoryUtils.user;
+    const user = this.props.user;
     if (user && user._id) {
-      return <Redirect to='/'></Redirect>;
+      return <Redirect to='/home'></Redirect>;
     }
+
     return (
       <div className='login'>
         <header className='login-header'>后台管理系统</header>
@@ -68,4 +60,9 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default connect(
+  (state) => {
+    return {user: state.user};
+  },
+  {login}
+)(Login);

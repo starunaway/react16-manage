@@ -4,7 +4,6 @@ import logo from '../../assets/images/logo.png';
 import menuList from '../../config/menuConfig';
 import {Link, withRouter} from 'react-router-dom';
 import {Menu} from 'antd';
-import memoryUtils from '../../utils/memoryUtils';
 import {connect} from 'react-redux';
 import {setHeadTitle} from '../../redux/actions';
 const {SubMenu} = Menu;
@@ -14,10 +13,10 @@ class LeftNav extends Component {
 
   hasAuth = (item) => {
     const {key, isPublic} = item;
+    const {user} = this.props;
+    const menus = (user || {}).role || {}.menus;
 
-    const menus = ((memoryUtils.user || {}).role || {}).menus;
-
-    const username = (memoryUtils.user || {}).username;
+    const username = (user || {}).username;
     /*
     1. 如果当前用户是admin
     2. 如果当前item是公开的
@@ -121,7 +120,9 @@ class LeftNav extends Component {
 
 export default connect(
   (state) => {
-    return {};
+    return {
+      user: state.user,
+    };
   },
   {setHeadTitle}
 )(withRouter(LeftNav));
