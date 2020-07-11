@@ -45,7 +45,6 @@ class LeftNav extends Component {
       if (this.hasAuth(item)) {
         if (!item.children) {
           const {pathname} = this.props.location;
-
           if (item.key === pathname || pathname.indexOf(item.key) === 0) {
             this.props.setHeadTitle(item.title);
           }
@@ -67,7 +66,7 @@ class LeftNav extends Component {
 
           pre.push(
             <SubMenu key={item.key} icon={item.icon} title={item.title}>
-              {this.getMenuNodes_Map(item.children)}
+              {this.getMenuNodes(item.children)}
             </SubMenu>
           );
         }
