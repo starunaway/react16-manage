@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux';
 import storageUtils from '../utils/storageUtils';
 
-function headTitle(state = '首页', action) {
+function headTitle(state = '', action) {
   switch (action.type) {
     case 'setHeadTitle':
       return action.data;

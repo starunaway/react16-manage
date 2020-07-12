@@ -11,6 +11,7 @@ import User from '../user/user';
 import Bar from '../charts/bar';
 import Line from '../charts/line';
 import Pie from '../charts/pie';
+import NotFound from '../not-found/not-found';
 import {connect} from 'react-redux';
 const {Footer, Sider, Content} = Layout;
 
@@ -31,6 +32,7 @@ class Admin extends Component {
           <Header>Header</Header>
           <Content style={{backgroundColor: '#fff', margin: 20}}>
             <Switch>
+              <Redirect exact from='/' to='/home'></Redirect>
               <Route path='/home' component={Home} />
               <Route path='/role' component={Role} />
               <Route path='/category' component={Category} />
@@ -39,7 +41,7 @@ class Admin extends Component {
               <Route path='/charts/bar' component={Bar} />
               <Route path='/charts/line' component={Line} />
               <Route path='/charts/pie' component={Pie} />
-              <Redirect to='/home'></Redirect>
+              <Route component={NotFound}></Route>
             </Switch>
           </Content>
           <Footer style={{textAlign: 'center', color: '#ccc'}}>推荐使用Chrome浏览器,可以获得更好的体验</Footer>
